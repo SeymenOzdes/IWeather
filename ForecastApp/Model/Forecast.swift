@@ -16,5 +16,8 @@ struct WeatherModel: Codable {
     let humidity: Int32
     let tempDescription: String
     
-    static let mockWeatherData: [WeatherModel] = [WeatherModel(city: "İzmir", temperature: 20, maxTemp: 26, minTemp: 24, humidity: 68, tempDescription: "mostly sunny")]
+    static let mockWeatherData: [WeatherModel] = [
+        WeatherModel(city: "İzmir", temperature: 20, maxTemp: 26, minTemp: 24, humidity: 68, tempDescription: "mostly sunny"),
+        WeatherModel(city: "İstanbul", temperature: 14, maxTemp: 13, minTemp: 2, humidity: 22, tempDescription: "cloudly")
+    ]
 }

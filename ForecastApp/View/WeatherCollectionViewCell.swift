@@ -44,7 +44,6 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         leftStackView.isLayoutMarginsRelativeArrangement = true // -> stackview içindeki öğelere margin verebilmek için kullanılır.
         leftStackView.distribution = .equalSpacing // -> stackview içerisindeki 2 öğeyi birbirinden zıt köşelere itmek için kullandık. Normalde eşit boşluk verir öğeler arasına.
         leftStackView.alignment = .leading
-        // leftStackView.backgroundColor = .blue
         leftStackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
         return leftStackView
     }()
@@ -54,7 +53,6 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         rightStackView.isLayoutMarginsRelativeArrangement = true
         rightStackView.distribution = .equalSpacing
         rightStackView.alignment = .center
-        //rightStackView.backgroundColor = .red
         rightStackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 22)
         return rightStackView
     }()
@@ -68,6 +66,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         mainStackView.alignment = .fill
         return mainStackView
     }()
+    
     private func setupUI() {
         contentView.addSubview(mainStackView)
     }
@@ -85,6 +84,12 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         contentView.layer.masksToBounds = true // içeriğin köşelerden taşmasını engelledik.
     }
     
+    func configure(with weather: WeatherModel) { // MARK: High and low bölümünden verilerin çekilmesine bakılacak. 
+        cityName.text = weather.city
+        temparature.text = String(weather.temperature)
+        weatherDesc.text = weather.tempDescription
+        
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()

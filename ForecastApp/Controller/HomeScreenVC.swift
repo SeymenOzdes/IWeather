@@ -10,6 +10,7 @@ import UIKit
 class HomeScreenVC: UIViewController {
     
     weak var collectionView: UICollectionView!
+    private let weatherModel = WeatherModel.mockWeatherData
     
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -58,14 +59,21 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        10
+        weatherModel.count
     }
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard indexPath.item < weatherModel.count else {
+            print("HATA: Geçersiz indexPath.item: \(indexPath.item), weatherModel.count: \(weatherModel.count)")
+            return UICollectionViewCell()
+        }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCollectionViewCell
+        let weather = weatherModel[indexPath.item]
+        cell.configure(with: weather)
         return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
     }
 }
 
