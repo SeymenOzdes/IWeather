@@ -11,32 +11,29 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     private let weatherModel = WeatherModel.mockWeatherData
     
     private lazy var weatherDesc: UILabel = {
-        let weatherDesc = UILabel()
-        weatherDesc.translatesAutoresizingMaskIntoConstraints = false
-        weatherDesc.text = "Sunny"
-        weatherDesc.textColor = .white
-        return weatherDesc
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        return label
     }()
     private lazy var cityName: UILabel = {
-        let cityName = UILabel()
-        cityName.translatesAutoresizingMaskIntoConstraints = false
-        cityName.text = "İzmir"
-        cityName.font = UIFont.preferredFont(forTextStyle: .title1)
-        cityName.textColor = .white
-        return cityName
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.preferredFont(forTextStyle: .title1)
+        label.textColor = .white
+        return label
     }()
     private lazy var temparature: UILabel = {
-        let temperature = UILabel()
-        temperature.text = "12"
-        temperature.textColor = .white
-        temperature.font = UIFont.preferredFont(forTextStyle: .extraLargeTitle)
-        return temperature
+        let label = UILabel()
+        label.textColor = .white
+        label.font = UIFont.preferredFont(forTextStyle: .extraLargeTitle)
+        return label
     }()
     private lazy var highAndLowTemp: UILabel = {
-        let temperature = UILabel()
-        temperature.text = "H:34 L:24"
-        temperature.textColor = .white
-        return temperature
+        let label = UILabel()
+        label.text = "H:34 L:24"
+        label.textColor = .white
+        return label
     }()
     private lazy var leftStackView: UIStackView = {
         let leftStackView = UIStackView(arrangedSubviews: [cityName, weatherDesc])
@@ -83,12 +80,10 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 18
         contentView.layer.masksToBounds = true // içeriğin köşelerden taşmasını engelledik.
     }
-    
-    func configure(with weather: WeatherModel) { // MARK: High and low bölümünden verilerin çekilmesine bakılacak. 
+    func configureLabel(with weather: WeatherModel) { // MARK: High and low bölümünden verilerin çekilmesine bakılacak. 
         cityName.text = weather.city
         temparature.text = String(weather.temperature)
-        weatherDesc.text = weather.tempDescription
-        
+        weatherDesc.text = weather.weatherDescription
     }
     override init(frame: CGRect) {
         super.init(frame: frame)

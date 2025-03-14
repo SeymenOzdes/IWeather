@@ -8,7 +8,6 @@
 import UIKit
 
 class HomeScreenVC: UIViewController {
-    
     weak var collectionView: UICollectionView!
     private let weatherModel = WeatherModel.mockWeatherData
     
@@ -18,7 +17,6 @@ class HomeScreenVC: UIViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         return searchController
     }()
-    
     // loadview ekran ilk yüklendiğinde çağrılır. init method gibi glb. Temel view'leri oluşturmak için kullanılır. View hiyerarşisine eklenen viewlar galiba.
     override func loadView() {
         super.loadView() // load view uygulamanın otomatik uiview nesnesi oluşturmasını sağlar eğer bunu yazmazsak uiview nesnesi oluşturmamız gerekir yoksa siyah ekran alırız.
@@ -37,7 +35,6 @@ class HomeScreenVC: UIViewController {
         ])
         self.collectionView = collectionView
     }
-    
     // loadview sonrasında çağrılır. view üzerinde değişiklik yapabiliriz.
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,11 +66,13 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource {
         }
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCollectionViewCell
         let weather = weatherModel[indexPath.item]
-        cell.configure(with: weather)
+        cell.configureLabel(with: weather)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+        let weather = weatherModel[indexPath.item]
+        let weatherDetailScreen = WeatherDetailViewController(weatherModel: weather)
+        navigationController?.pushViewController(weatherDetailScreen, animated: true)
     }
 }
 
