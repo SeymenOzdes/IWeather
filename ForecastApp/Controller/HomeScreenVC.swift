@@ -17,15 +17,14 @@ class HomeScreenVC: UIViewController {
         searchController.obscuresBackgroundDuringPresentation = false
         return searchController
     }()
-    // loadview ekran ilk yüklendiğinde çağrılır. init method gibi glb. Temel view'leri oluşturmak için kullanılır. View hiyerarşisine eklenen viewlar galiba.
+    
     override func loadView() {
-        super.loadView() // load view uygulamanın otomatik uiview nesnesi oluşturmasını sağlar eğer bunu yazmazsak uiview nesnesi oluşturmamız gerekir yoksa siyah ekran alırız.
+        super.loadView()
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(collectionView)
-        
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -39,10 +38,12 @@ class HomeScreenVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .mainBackgroundColor
+
         self.navigationItem.title = "Weather"
         self.navigationItem.searchController = searchController
         collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .clear
         
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -51,7 +52,7 @@ class HomeScreenVC: UIViewController {
     }
 }
 
-extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource {
+extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
@@ -71,16 +72,18 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let weather = weatherModel[indexPath.item]
-        let weatherDetailScreen = WeatherDetailViewController(weatherModel: weather)
+        let weatherDetailScreen = WeatherDetailVC(weatherModel: weather)
         navigationController?.pushViewController(weatherDetailScreen, animated: true)
     }
-}
-
-extension HomeScreenVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: collectionView.bounds.width - 24, height: 120)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
     }
+}
+
+extension UIColor {
+    static let themeColor = UIColor(red: 74/255, green: 144/255, blue: 226/255, alpha: 1)
+    static let mainBackgroundColor = UIColor(red: 240/255, green: 244/255, blue: 250/255, alpha: 1)
 }

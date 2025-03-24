@@ -11,30 +11,36 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     private let weatherModel = WeatherModel.mockWeatherData
     
     private lazy var weatherDesc: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .white
-        return label
-    }()
-    private lazy var cityName: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.preferredFont(forTextStyle: .title1)
-        label.textColor = .white
-        return label
-    }()
-    private lazy var temparature: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = UIFont.preferredFont(forTextStyle: .extraLargeTitle)
-        return label
-    }()
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.textColor = .white.withAlphaComponent(0.8)
+            label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+            return label
+        }()
+        
+        private lazy var cityName: UILabel = {
+            let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.textColor = .white
+            label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+            return label
+        }()
+        
+        private lazy var temparature: UILabel = {
+            let label = UILabel()
+            label.textColor = .white.withAlphaComponent(0.9) // Slight opacity reduction
+            label.font = UIFont.systemFont(ofSize: 36, weight: .bold)
+            return label
+        }()
+    
     private lazy var highAndLowTemp: UILabel = {
         let label = UILabel()
         label.text = "H:34 L:24"
-        label.textColor = .white
+        label.textColor = .white.withAlphaComponent(0.7)
+        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         return label
     }()
+    
     private lazy var leftStackView: UIStackView = {
         let leftStackView = UIStackView(arrangedSubviews: [cityName, weatherDesc])
         leftStackView.axis = .vertical
@@ -64,10 +70,21 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         return mainStackView
     }()
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupUI()
+        configureConstraints()
+        configureApperence()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     private func setupUI() {
         contentView.addSubview(mainStackView)
     }
-    private func setupConstraints() {
+    private func configureConstraints() {
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
@@ -76,23 +93,20 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         ])
     }
     private func configureApperence() {
-        contentView.backgroundColor = .black
-        contentView.layer.cornerRadius = 18
-        contentView.layer.masksToBounds = true // içeriğin köşelerden taşmasını engelledik.
-    }
-    func configureLabel(with weather: WeatherModel) { // MARK: High and low bölümünden verilerin çekilmesine bakılacak. 
+            contentView.backgroundColor = .themeColor
+            contentView.layer.cornerRadius = 18
+            contentView.layer.masksToBounds = true
+            
+            // Optional: Add a subtle shadow for depth
+            layer.shadowColor = UIColor.black.cgColor
+            layer.shadowOffset = CGSize(width: 0, height: 2)
+            layer.shadowRadius = 4
+            layer.shadowOpacity = 0.1
+        }
+    // MARK: High and low bölümünden verilerin çekilmesine bakılacak.
+    func configureLabel(with weather: WeatherModel) {
         cityName.text = weather.city
         temparature.text = String(weather.temperature)
         weatherDesc.text = weather.weatherDescription
-    }
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupUI()
-        setupConstraints()
-        configureApperence()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
