@@ -7,7 +7,7 @@
 
 import UIKit
 
-class HomeScreenVC: UIViewController {
+final class HomeScreenVC: UIViewController {
     weak var collectionView: UICollectionView!
     private let weatherModel = WeatherModel.mockWeatherData
     
@@ -57,27 +57,33 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         1
     }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         weatherModel.count
     }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard indexPath.item < weatherModel.count else {
             print("HATA: Geçersiz indexPath.item: \(indexPath.item), weatherModel.count: \(weatherModel.count)")
             return UICollectionViewCell()
         }
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCollectionViewCell
         let weather = weatherModel[indexPath.item]
         cell.configureLabel(with: weather)
         return cell
     }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let weather = weatherModel[indexPath.item]
         let weatherDetailScreen = WeatherDetailVC(weatherModel: weather)
         navigationController?.pushViewController(weatherDetailScreen, animated: true)
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: collectionView.bounds.width - 24, height: 120)
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
     }

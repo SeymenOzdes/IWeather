@@ -18,20 +18,20 @@ class WeatherCollectionViewCell: UICollectionViewCell {
             return label
         }()
         
-        private lazy var cityName: UILabel = {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.textColor = .white
-            label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
-            return label
-        }()
+    private lazy var cityName: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        return label
+    }()
         
-        private lazy var temparature: UILabel = {
-            let label = UILabel()
-            label.textColor = .white.withAlphaComponent(0.9) // Slight opacity reduction
-            label.font = UIFont.systemFont(ofSize: 36, weight: .bold)
-            return label
-        }()
+    private lazy var temparature: UILabel = {
+        let label = UILabel()
+        label.textColor = .white.withAlphaComponent(0.9) // Slight opacity reduction
+        label.font = UIFont.systemFont(ofSize: 36, weight: .bold)
+        return label
+    }()
     
     private lazy var highAndLowTemp: UILabel = {
         let label = UILabel()
@@ -50,6 +50,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         leftStackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
         return leftStackView
     }()
+    
     private lazy var rightStackView: UIStackView = {
         let rightStackView = UIStackView(arrangedSubviews: [temparature, highAndLowTemp])
         rightStackView.axis = .vertical
@@ -59,6 +60,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
         rightStackView.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 22)
         return rightStackView
     }()
+    
     private lazy var mainStackView: UIStackView = {
         let mainStackView = UIStackView(arrangedSubviews: [leftStackView, rightStackView])
         mainStackView.axis = .horizontal
@@ -80,7 +82,9 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+
+extension WeatherCollectionViewCell {
     private func setupUI() {
         contentView.addSubview(mainStackView)
     }

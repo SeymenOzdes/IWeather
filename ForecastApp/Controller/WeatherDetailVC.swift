@@ -38,7 +38,7 @@ class WeatherDetailVC: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         let customFont = UIFont.systemFont(ofSize: 20, weight: .medium)
         label.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: customFont)
-        label.textColor = .white.withAlphaComponent(0.8) // Even more subtle opacity
+        label.textColor = .white.withAlphaComponent(0.8) 
         return label
     }()
     
@@ -130,6 +130,7 @@ extension WeatherDetailVC: UICollectionViewDelegate, UICollectionViewDataSource,
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCell", for: indexPath) as! HourlyCollectionViewCell
+        cell.configureHourlyCollectionView(with: weatherModel)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -149,6 +150,8 @@ extension WeatherDetailVC: UITableViewDataSource, UITableViewDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "DailyCell", for: indexPath) as? DailyTableViewCell else {
             fatalError("Could not dequeue DailyTableViewCell")
         }
+        
+        cell.configureDailyTableViewCell(with: weatherModel)
         return cell
     }
     

@@ -1,6 +1,8 @@
 import UIKit
 
 class HourlyCollectionViewCell: UICollectionViewCell {
+    var weatherModel: WeatherModel?
+    
     private lazy var hours: UILabel = {
         let label = UILabel()
         label.text = "10AM"
@@ -20,7 +22,6 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     private lazy var temperature: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "21°"
         label.font = .preferredFont(forTextStyle: .title2)
         label.textColor = .white.withAlphaComponent(0.9)
         label.font = UIFont.systemFont(ofSize: label.font.pointSize, weight: .semibold)
@@ -45,7 +46,9 @@ class HourlyCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+
+extension HourlyCollectionViewCell {
     private func setUpUI() {
         contentView.addSubview(mainStackView)
         contentView.backgroundColor = .themeColor
@@ -63,5 +66,9 @@ class HourlyCollectionViewCell: UICollectionViewCell {
             icons.widthAnchor.constraint(equalToConstant: 30),
             icons.heightAnchor.constraint(equalToConstant: 30)
         ])
+    }
+    
+    func configureHourlyCollectionView(with weather: WeatherModel) {
+        temperature.text = "\(weather.temperature)"
     }
 }

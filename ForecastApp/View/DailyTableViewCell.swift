@@ -1,10 +1,11 @@
 import UIKit
 
 class DailyTableViewCell: UITableViewCell {
+    var weatherModel: WeatherModel?
+    
     private lazy var minTemperature: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "14°"
         label.textColor = .white.withAlphaComponent(0.8)
         label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         return label
@@ -13,7 +14,6 @@ class DailyTableViewCell: UITableViewCell {
     private lazy var maxTemperature: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "28°"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         return label
@@ -47,7 +47,7 @@ class DailyTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         setUpUI()
         configureConstraints()
     }
@@ -55,7 +55,9 @@ class DailyTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+}
+
+extension DailyTableViewCell {
     private func setUpUI() {
         contentView.addSubview(mainStackView)
         contentView.backgroundColor = .themeColor
@@ -72,5 +74,9 @@ class DailyTableViewCell: UITableViewCell {
             icons.widthAnchor.constraint(equalToConstant: 25),
             icons.heightAnchor.constraint(equalToConstant: 25)
         ])
+    }
+    func configureDailyTableViewCell(with weather: WeatherModel) {
+        minTemperature.text = "\(weather.minTemp)"
+        maxTemperature.text = "\(weather.maxTemp)"
     }
 }
