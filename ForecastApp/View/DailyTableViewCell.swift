@@ -76,7 +76,7 @@ extension DailyTableViewCell {
         ])
     }
     func configureDailyTableViewCell(with weather: WeatherModel) {
-        minTemperature.text = "\(weather.minTemp)"
-        maxTemperature.text = "\(weather.maxTemp)"
+        minTemperature.text = "\(weather.main.temp_min)"
+        maxTemperature.text = "\(weather.main.temp_max)"
     }
 }

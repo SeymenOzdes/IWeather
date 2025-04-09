@@ -108,9 +108,9 @@ extension WeatherCollectionViewCell {
             layer.shadowOpacity = 0.1
         }
     // MARK: High and low bölümünden verilerin çekilmesine bakılacak.
-    func configureLabel(with weather: WeatherModel) {
-        cityName.text = weather.city
-        temparature.text = String(weather.temperature)
-        weatherDesc.text = weather.weatherDescription
+    func configureLabel(with weatherData: WeatherModel) {
+        cityName.text = weatherData.name
+        temparature.text = String(weatherData.main.temp)
+        weatherDesc.text = weatherData.weather.first?.description ?? "No description available"
     }
 }

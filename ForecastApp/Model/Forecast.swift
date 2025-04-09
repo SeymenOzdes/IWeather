@@ -8,16 +8,30 @@
 import Foundation
 
 struct WeatherModel: Codable {
+    let name: String
+    let weather: [Weather]
+    let main: Main
     
-    let city: String
-    let temperature: Int32
-    let maxTemp: Int32
-    let minTemp: Int32
-    let humidity: Int32
-    let weatherDescription: String
+    struct Weather: Codable {
+        let id: Int
+        let description: String
+    }
+    struct Main: Codable {
+        let temp: Int32
+        let temp_min: Int32
+        let temp_max: Int32
+    }
     
     static let mockWeatherData: [WeatherModel] = [
-        WeatherModel(city: "İzmir", temperature: 20, maxTemp: 26, minTemp: 24, humidity: 68, weatherDescription: "mostly sunny"),
-        WeatherModel(city: "İstanbul", temperature: 14, maxTemp: 13, minTemp: 2, humidity: 22, weatherDescription: "cloudly")
+        WeatherModel(
+            name: "İzmir",
+            weather: [Weather(id: 800, description: "mostly sunny")],
+            main: Main(temp: 20, temp_min: 24, temp_max: 26)
+        ),
+        WeatherModel(
+            name: "İstanbul",
+            weather: [Weather(id: 803, description: "cloudly")],
+            main: Main(temp: 14, temp_min: 2, temp_max: 13)
+        )
     ]
 }

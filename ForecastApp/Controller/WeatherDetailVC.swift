@@ -14,7 +14,7 @@ class WeatherDetailVC: UIViewController {
         
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = weatherModel.city
+        label.text = weatherModel.name
         label.translatesAutoresizingMaskIntoConstraints = false
         let customFont = UIFont.systemFont(ofSize: 50, weight: .semibold)
         label.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: customFont)
@@ -24,7 +24,7 @@ class WeatherDetailVC: UIViewController {
     
     private lazy var temperature: UILabel = {
         let label = UILabel()
-        label.text = String(weatherModel.temperature)
+        label.text = String(weatherModel.main.temp)
         label.translatesAutoresizingMaskIntoConstraints = false
         let customFont = UIFont.systemFont(ofSize: 76, weight: .bold)
         label.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: customFont)
@@ -34,7 +34,7 @@ class WeatherDetailVC: UIViewController {
     
     private lazy var weatherDesciption: UILabel = {
         let label = UILabel()
-        label.text = weatherModel.weatherDescription
+        label.text = weatherModel.weather.first?.description ?? "No desctiption available"
         label.translatesAutoresizingMaskIntoConstraints = false
         let customFont = UIFont.systemFont(ofSize: 20, weight: .medium)
         label.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: customFont)
@@ -143,7 +143,7 @@ extension WeatherDetailVC: UICollectionViewDelegate, UICollectionViewDataSource,
 
 extension WeatherDetailVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherModel.city.count
+        weatherModel.name.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
