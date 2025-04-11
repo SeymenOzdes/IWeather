@@ -8,7 +8,6 @@
 import UIKit
 
 class WeatherCollectionViewCell: UICollectionViewCell {
-    private let weatherModel = WeatherModel.mockWeatherData
     
     private lazy var weatherDesc: UILabel = {
             let label = UILabel()

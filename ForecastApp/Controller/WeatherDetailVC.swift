@@ -45,7 +45,7 @@ class WeatherDetailVC: UIViewController {
     private lazy var maxAndLowTemps: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "H:21° L:10°"
+        label.text = "H:\(weatherModel.main.temp_max)° L:\(weatherModel.main.temp_min)°"
         label.textColor = .white.withAlphaComponent(0.7)
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         return label
@@ -64,8 +64,8 @@ class WeatherDetailVC: UIViewController {
         return stackView
     }()
     
-    init(weatherModel: WeatherModel) {
-        self.weatherModel = weatherModel
+    init(weatherModel: WeatherModel?) {
+        self.weatherModel = weatherModel!
         super.init(nibName: nil, bundle: nil)
     
     }
@@ -159,7 +159,7 @@ extension WeatherDetailVC: UITableViewDataSource, UITableViewDelegate {
         60
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        "10-Day Forecast"
+        "5-Day Forecast"
     }
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         if let header = view as? UITableViewHeaderFooterView {

@@ -15,8 +15,7 @@ protocol LocationServiceDelegate: AnyObject {
 
 class LocationService: NSObject {
     let locationManager = CLLocationManager()
-    weak var delegate: LocationServiceDelegate?
-    private(set) var lastLocation: CLLocation?
+    weak var delegate: LocationServiceDelegate? // üst katmana bildirim yapacak nesne
     
     override init() {
         super.init()
@@ -90,9 +89,10 @@ extension LocationService: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: any Error) {
         delegate?.locationService(self, didFailWithError: error)
     }
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else {return}
-        lastLocation = location
+        guard let location = locations.last else { return }
         delegate?.locationService(self, didUpdateLocation: location)
+        
     }
 }

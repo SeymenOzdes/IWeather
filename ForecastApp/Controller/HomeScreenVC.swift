@@ -6,10 +6,14 @@
 //
 
 import UIKit
+import CoreLocation
 
 final class HomeScreenVC: UIViewController {
     weak var collectionView: UICollectionView!
-    private let weatherModel = WeatherModel.mockWeatherData
+    // private var weatherModel = WeatherModel.mockWeatherData
+    private let locationService = LocationService()
+    private let networkManager = NetworkManager()
+    private var realWeatherModel: [WeatherModel]? = []// MARK: Buna çevrilecek
     
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -47,8 +51,11 @@ final class HomeScreenVC: UIViewController {
         
         collectionView.delegate = self
         collectionView.dataSource = self
+        locationService.delegate = self
         
         collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCell")
+        
+        locationService.requestLocationPermission()
     }
 }
 
@@ -59,24 +66,26 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        weatherModel.count
+        realWeatherModel?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard indexPath.item < weatherModel.count else {
-            print("HATA: Geçersiz indexPath.item: \(indexPath.item), weatherModel.count: \(weatherModel.count)")
+        guard indexPath.item < realWeatherModel?.count ?? 0 else {
+            print("HATA: Geçersiz indexPath.item: \(indexPath.item), weatherModel.count: \(realWeatherModel?.count ?? 0)")
             return UICollectionViewCell()
         }
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCollectionViewCell
-        let weather = weatherModel[indexPath.item]
-        cell.configureLabel(with: weather)
+        // let weather = weatherModel[indexPath.item]
+        let realWeather = realWeatherModel?[indexPath.item]
+        // print(weather)
+        cell.configureLabel(with: realWeather!)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let weather = weatherModel[indexPath.item]
-        let weatherDetailScreen = WeatherDetailVC(weatherModel: weather)
+        let weather = realWeatherModel?[indexPath.item]
+        let weatherDetailScreen = WeatherDetailVC(weatherModel: weather!)
         navigationController?.pushViewController(weatherDetailScreen, animated: true)
     }
     
@@ -92,4 +101,27 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
 extension UIColor {
     static let themeColor = UIColor(red: 74/255, green: 144/255, blue: 226/255, alpha: 1)
     static let mainBackgroundColor = UIColor(red: 240/255, green: 244/255, blue: 250/255, alpha: 1)
+}
+
+extension HomeScreenVC: LocationServiceDelegate {
+    func locationService(_: LocationService, didUpdateLocation Location: CLLocation)  {
+        let latitude = Location.coordinate.latitude
+        let longitude = Location.coordinate.longitude
+        
+        Task {
+            do {
+                let weatherData = try await networkManager.fetchCurrentForecast(latitude: latitude, longitude: longitude)
+                realWeatherModel?.append(weatherData)
+                collectionView.reloadData()
+                print(weatherData)
+                
+            } catch {
+                print("error \(error)")
+            }
+        }
+    }
+    
+    func locationService(_: LocationService, didFailWithError: any Error) {
+        print("location \(didFailWithError)")
+    }
 }

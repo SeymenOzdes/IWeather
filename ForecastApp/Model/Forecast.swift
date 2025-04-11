@@ -17,9 +17,9 @@ struct WeatherModel: Codable {
         let description: String
     }
     struct Main: Codable {
-        let temp: Int32
-        let temp_min: Int32
-        let temp_max: Int32
+        let temp: Double
+        let temp_min: Double
+        let temp_max: Double
     }
     
     static let mockWeatherData: [WeatherModel] = [
