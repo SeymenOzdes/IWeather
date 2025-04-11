@@ -24,7 +24,7 @@ class WeatherDetailVC: UIViewController {
     
     private lazy var temperature: UILabel = {
         let label = UILabel()
-        label.text = String(weatherModel.main.temp)
+        label.text = String(Int(weatherModel.main.temp))
         label.translatesAutoresizingMaskIntoConstraints = false
         let customFont = UIFont.systemFont(ofSize: 76, weight: .bold)
         label.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: customFont)
@@ -45,7 +45,7 @@ class WeatherDetailVC: UIViewController {
     private lazy var maxAndLowTemps: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "H:\(weatherModel.main.temp_max)° L:\(weatherModel.main.temp_min)°"
+        label.text = "H:\(Int(weatherModel.main.temp_max))° L:\(Int(weatherModel.main.temp_min))°"
         label.textColor = .white.withAlphaComponent(0.7)
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         return label

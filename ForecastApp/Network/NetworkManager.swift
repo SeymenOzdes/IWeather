@@ -13,7 +13,7 @@ class NetworkManager {
     let apiKey = "75d7c6e989dbdb93c25fc219cf910d89"
     
     func fetchCurrentForecast(latitude: Double, longitude: Double) async throws -> WeatherModel {
-        let baseUrl = "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)"
+        let baseUrl = "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)&units=metric"
         let url = URL(string: "\(baseUrl)")
         
         guard let url = url else {

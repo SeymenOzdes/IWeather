@@ -10,10 +10,9 @@ import CoreLocation
 
 final class HomeScreenVC: UIViewController {
     weak var collectionView: UICollectionView!
-    // private var weatherModel = WeatherModel.mockWeatherData
     private let locationService = LocationService()
     private let networkManager = NetworkManager()
-    private var realWeatherModel: [WeatherModel]? = []// MARK: Buna çevrilecek
+    private var weatherModel: [WeatherModel] = []
     
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -66,26 +65,24 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        realWeatherModel?.count ?? 0
+        weatherModel.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard indexPath.item < realWeatherModel?.count ?? 0 else {
-            print("HATA: Geçersiz indexPath.item: \(indexPath.item), weatherModel.count: \(realWeatherModel?.count ?? 0)")
+        guard indexPath.item < weatherModel.count else {
+            print("HATA: Geçersiz indexPath.item: \(indexPath.item), weatherModel.count: \(weatherModel.count)")
             return UICollectionViewCell()
         }
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCollectionViewCell
-        // let weather = weatherModel[indexPath.item]
-        let realWeather = realWeatherModel?[indexPath.item]
-        // print(weather)
-        cell.configureLabel(with: realWeather!)
+        let weather = weatherModel[indexPath.item]
+        cell.configureLabel(with: weather, temp_Min: weather.main.temp_min, temp_Max: weather.main.temp_max)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let weather = realWeatherModel?[indexPath.item]
-        let weatherDetailScreen = WeatherDetailVC(weatherModel: weather!)
+        let weather = weatherModel[indexPath.item]
+        let weatherDetailScreen = WeatherDetailVC(weatherModel: weather)
         navigationController?.pushViewController(weatherDetailScreen, animated: true)
     }
     
@@ -111,12 +108,11 @@ extension HomeScreenVC: LocationServiceDelegate {
         Task {
             do {
                 let weatherData = try await networkManager.fetchCurrentForecast(latitude: latitude, longitude: longitude)
-                realWeatherModel?.append(weatherData)
+                weatherModel.append(weatherData)
                 collectionView.reloadData()
-                print(weatherData)
                 
             } catch {
-                print("error \(error)")
+                print("error \(error.localizedDescription)")
             }
         }
     }

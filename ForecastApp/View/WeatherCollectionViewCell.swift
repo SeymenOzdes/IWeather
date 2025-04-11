@@ -34,7 +34,7 @@ class WeatherCollectionViewCell: UICollectionViewCell {
     
     private lazy var highAndLowTemp: UILabel = {
         let label = UILabel()
-        label.text = "H:34 L:24"
+        label.text = ""
         label.textColor = .white.withAlphaComponent(0.7)
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         return label
@@ -107,9 +107,11 @@ extension WeatherCollectionViewCell {
             layer.shadowOpacity = 0.1
         }
     // MARK: High and low bölümünden verilerin çekilmesine bakılacak.
-    func configureLabel(with weatherData: WeatherModel) {
+    func configureLabel(with weatherData: WeatherModel, temp_Min: Double, temp_Max: Double) {
         cityName.text = weatherData.name
-        temparature.text = String(weatherData.main.temp)
+        temparature.text = String(Int(weatherData.main.temp))
         weatherDesc.text = weatherData.weather.first?.description ?? "No description available"
+        
+        highAndLowTemp.text = "H:\(Int(temp_Max)) L:\(Int(temp_Min))"
     }
 }
