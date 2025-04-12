@@ -13,6 +13,7 @@ final class HomeScreenVC: UIViewController {
     private let locationService = LocationService()
     private let networkManager = NetworkManager()
     private var weatherModel: [WeatherModel] = []
+    private let loadingIndicator = LoadingIndicator(frame: .zero)
     
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController(searchResultsController: nil)
@@ -55,7 +56,19 @@ final class HomeScreenVC: UIViewController {
         collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCell")
         
         locationService.requestLocationPermission()
+        
+        setupLoadingIndicator()
     }
+    private func setupLoadingIndicator() {
+        view.addSubview(loadingIndicator)
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+
 }
 
 extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -105,6 +118,8 @@ extension HomeScreenVC: LocationServiceDelegate {
         let latitude = Location.coordinate.latitude
         let longitude = Location.coordinate.longitude
         
+        loadingIndicator.startAnimating()
+        
         Task {
             do {
                 let weatherData = try await networkManager.fetchCurrentForecast(latitude: latitude, longitude: longitude)
@@ -113,6 +128,7 @@ extension HomeScreenVC: LocationServiceDelegate {
             } catch {
                 print("error \(error.localizedDescription)")
             }
+            loadingIndicator.stopAnimating()
         }
     }
     
