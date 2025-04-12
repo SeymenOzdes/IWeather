@@ -110,7 +110,6 @@ extension HomeScreenVC: LocationServiceDelegate {
                 let weatherData = try await networkManager.fetchCurrentForecast(latitude: latitude, longitude: longitude)
                 weatherModel.append(weatherData)
                 collectionView.reloadData()
-                
             } catch {
                 print("error \(error.localizedDescription)")
             }

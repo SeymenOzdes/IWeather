@@ -13,20 +13,33 @@ class NetworkManager {
     let apiKey = "75d7c6e989dbdb93c25fc219cf910d89"
     
     func fetchCurrentForecast(latitude: Double, longitude: Double) async throws -> WeatherModel {
-        let baseUrl = "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)&units=metric"
-        let url = URL(string: "\(baseUrl)")
+        let endPoint = "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)&units=metric"
+        let url = URL(string: "\(endPoint)")
         
         guard let url = url else {
-            throw NSError(domain: "Create URL Error", code: 2, userInfo: nil)
+            throw networkError.invalidURL
         }
         
         let (data, _) = try await URLSession.shared.data(from: url)
-        
-        if let jsonString = String(data: data, encoding: .utf8) {
-            print("API JSON Yanıtı: \(jsonString)")
-        }
-        
         let decoded = try JSONDecoder().decode(WeatherModel.self, from: data)
         return decoded
     }
+    /*
+     func fetch5DayForecast(latitude: Double, longitude: Double) async throws -> ForecastWeeklyModel {
+         let endPoint = "api.openweathermap.org/data/2.5/forecast?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)&units=metric"
+         let url = URL(string: endPoint)
+         
+         guard let url = url else {
+             throw networkError.invalidURL
+         }
+         let (data, _) = try await URLSession.shared.data(from: url)
+         
+         let decoded = try JSONDecoder().decode(ForecastWeeklyModel.self, from: data)
+         return decoded
+     }
+     */
+}
+
+enum networkError: Error {
+    case invalidURL
 }

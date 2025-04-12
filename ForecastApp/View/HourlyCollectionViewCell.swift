@@ -69,6 +69,6 @@ extension HourlyCollectionViewCell {
     }
     
     func configureHourlyCollectionView(with weather: WeatherModel) {
-        temperature.text = "\(weather.main.temp)"
+        temperature.text = "\(Int(weather.main.temp))"
     }
 }
