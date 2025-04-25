@@ -64,6 +64,19 @@ class WeatherDetailVC: UIViewController {
         return stackView
     }()
     
+    private lazy var scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.showsVerticalScrollIndicator = true
+        return scrollView
+    }()
+    
+    private lazy var contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     init(weatherModel: WeatherModel?) {
         self.weatherModel = weatherModel!
         super.init(nibName: nil, bundle: nil)

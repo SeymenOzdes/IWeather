@@ -24,20 +24,7 @@ class NetworkManager {
         let decoded = try JSONDecoder().decode(WeatherModel.self, from: data)
         return decoded
     }
-    /*
-     func fetch5DayForecast(latitude: Double, longitude: Double) async throws -> ForecastWeeklyModel {
-         let endPoint = "api.openweathermap.org/data/2.5/forecast?lat=\(latitude)&lon=\(longitude)&appid=\(apiKey)&units=metric"
-         let url = URL(string: endPoint)
-         
-         guard let url = url else {
-             throw networkError.invalidURL
-         }
-         let (data, _) = try await URLSession.shared.data(from: url)
-         
-         let decoded = try JSONDecoder().decode(ForecastWeeklyModel.self, from: data)
-         return decoded
-     }
-     */
+    
 }
 
 enum networkError: Error {

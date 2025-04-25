@@ -72,15 +72,15 @@ extension LocationService: CLLocationManagerDelegate {
         case .notDetermined:
             manager.requestWhenInUseAuthorization()
             
-            case .authorizedAlways, .authorizedWhenInUse:
-                requestLocation()
+        case .authorizedAlways, .authorizedWhenInUse:
+            requestLocation()
             
         case .denied, .restricted:
             let error = NSError(domain: "LocationServiceErrorDomain",
                                 code: 1,
                                 userInfo: [NSLocalizedDescriptionKey: "Konum izni verilmedi. Lütfen ayarlardan izin verin."])
             delegate?.locationService(self, didFailWithError: error)
-       
+            
         @unknown default:
             break
         }
@@ -93,6 +93,5 @@ extension LocationService: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         delegate?.locationService(self, didUpdateLocation: location)
-        
     }
 }

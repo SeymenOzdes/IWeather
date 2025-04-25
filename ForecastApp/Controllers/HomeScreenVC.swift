@@ -9,18 +9,12 @@ import UIKit
 import CoreLocation
 
 final class HomeScreenVC: UIViewController {
+    
     weak var collectionView: UICollectionView!
     private let locationService = LocationService()
     private let networkManager = NetworkManager()
-    private var weatherModel: [WeatherModel] = []
     private let loadingIndicator = LoadingIndicator(frame: .zero)
-    
-    private lazy var searchController: UISearchController = {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.placeholder = "Search for a city or airport"
-        searchController.obscuresBackgroundDuringPresentation = false
-        return searchController
-    }()
+    private var weatherModel: [WeatherModel] = []
     
     override func loadView() {
         super.loadView()
@@ -38,14 +32,11 @@ final class HomeScreenVC: UIViewController {
         ])
         self.collectionView = collectionView
     }
-    // loadview sonrasında çağrılır. view üzerinde değişiklik yapabiliriz.
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .mainBackgroundColor
-
         self.navigationItem.title = "Weather"
-        self.navigationItem.searchController = searchController
         collectionView.backgroundColor = .white
         collectionView.backgroundColor = .clear
         
@@ -54,9 +45,7 @@ final class HomeScreenVC: UIViewController {
         locationService.delegate = self
         
         collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCell")
-        
         locationService.requestLocationPermission()
-        
         setupLoadingIndicator()
     }
     private func setupLoadingIndicator() {
@@ -68,7 +57,6 @@ final class HomeScreenVC: UIViewController {
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
     }
-
 }
 
 extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -108,11 +96,6 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
     }
 }
 
-extension UIColor {
-    static let themeColor = UIColor(red: 74/255, green: 144/255, blue: 226/255, alpha: 1)
-    static let mainBackgroundColor = UIColor(red: 240/255, green: 244/255, blue: 250/255, alpha: 1)
-}
-
 extension HomeScreenVC: LocationServiceDelegate {
     func locationService(_: LocationService, didUpdateLocation Location: CLLocation)  {
         let latitude = Location.coordinate.latitude
@@ -135,4 +118,9 @@ extension HomeScreenVC: LocationServiceDelegate {
     func locationService(_: LocationService, didFailWithError: any Error) {
         print("location \(didFailWithError)")
     }
+}
+
+extension UIColor {
+    static let themeColor = UIColor(red: 74/255, green: 144/255, blue: 226/255, alpha: 1)
+    static let mainBackgroundColor = UIColor(red: 240/255, green: 244/255, blue: 250/255, alpha: 1)
 }

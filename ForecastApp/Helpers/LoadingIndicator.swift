@@ -1,7 +1,6 @@
 import UIKit
 
 class LoadingIndicator: UIActivityIndicatorView {
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpUI()
