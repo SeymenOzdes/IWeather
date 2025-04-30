@@ -105,7 +105,6 @@ extension WeatherCollectionViewCell {
             layer.shadowRadius = 4
             layer.shadowOpacity = 0.1
         }
-    // MARK: High and low bölümünden verilerin çekilmesine bakılacak.
     func configureLabel(with weatherData: Forecast, temp_Min: Double, temp_Max: Double) {
         cityName.text = weatherData.name
         temparature.text = String(Int(weatherData.main.temp))

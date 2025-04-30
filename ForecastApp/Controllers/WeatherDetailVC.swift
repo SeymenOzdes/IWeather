@@ -12,7 +12,7 @@ class WeatherDetailVC: UIViewController {
     private let fiveDaysForecast: FiveDaysForecast
     private var hourlycollectionView: UICollectionView!
     private var dailyTableView: UITableView!
-    
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.text = forecast.name
@@ -72,7 +72,6 @@ class WeatherDetailVC: UIViewController {
         self.fiveDaysForecast = fiveDaysForecast
         self.forecast = forecast
         super.init(nibName: nil, bundle: nil)
-    
     }
     
     required init?(coder: NSCoder) {
@@ -150,7 +149,7 @@ extension WeatherDetailVC: UICollectionViewDelegate, UICollectionViewDataSource,
 
 extension WeatherDetailVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        3
+        5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

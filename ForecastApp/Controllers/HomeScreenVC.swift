@@ -16,6 +16,7 @@ final class HomeScreenVC: UIViewController {
     private let loadingIndicator = LoadingIndicator(frame: .zero)
     private var forecast: [Forecast] = []
     private var fiveDaysForecast: [FiveDaysForecast] = []
+
     override func loadView() {
         super.loadView()
         
@@ -83,9 +84,7 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let forecast = forecast[indexPath.item]
-        print(indexPath.item)
         let fiveDaysForecast = fiveDaysForecast[indexPath.item]
-        print(fiveDaysForecast)
         guard let weatherDetailScreen = WeatherDetailVC(forecast: forecast, fiveDaysForecast: fiveDaysForecast) else { return }
         navigationController?.pushViewController(weatherDetailScreen, animated: true)
     }
@@ -110,14 +109,23 @@ extension HomeScreenVC: LocationServiceDelegate {
             do {
                 let weatherData = try await networkManager.fetchCurrentForecast(latitude: latitude, longitude: longitude)
                 let fiveDayForecast = try await networkManager.fetchFiveDayForecast(latitude: latitude, longitude: longitude)
+
                 forecast.append(weatherData)
-                fiveDaysForecast.append(fiveDayForecast)
+                
+                // ⬇️ Yalnızca her günden bir tanesini al:
+                let filteredList = filterOneForecastPerDay(from: fiveDayForecast.list)
+                
+                // ⬇️ Yeni veriyi gönder:
+                let filteredFiveDays = FiveDaysForecast(list: filteredList)
+                fiveDaysForecast.append(filteredFiveDays)
+                
                 collectionView.reloadData()
             } catch {
                 print("error \(error.localizedDescription)")
             }
             loadingIndicator.stopAnimating()
         }
+
     }
     
     func locationService(_: LocationService, didFailWithError: any Error) {
@@ -125,6 +133,30 @@ extension HomeScreenVC: LocationServiceDelegate {
     }
 }
 
+extension HomeScreenVC {
+    func filterOneForecastPerDay(from list: [FiveDaysForecast.List]) -> [FiveDaysForecast.List] {
+        var filtered: [FiveDaysForecast.List] = []
+        var seenDays: Set<String> = []
+
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "yyyy-MM-dd"
+
+        for forecast in list {
+            guard let date = inputFormatter.date(from: forecast.dt_txt) else { continue }
+            let dayString = outputFormatter.string(from: date)
+
+            if !seenDays.contains(dayString) {
+                filtered.append(forecast)
+                seenDays.insert(dayString)
+            }
+        }
+
+        return filtered
+    }
+}
 extension UIColor {
     static let themeColor = UIColor(red: 74/255, green: 144/255, blue: 226/255, alpha: 1)
     static let mainBackgroundColor = UIColor(red: 240/255, green: 244/255, blue: 250/255, alpha: 1)

@@ -79,5 +79,19 @@ extension DailyTableViewCell {
     func configureDailyTableViewCell(with fiveDayForecast: FiveDaysForecast.List) {
         minTemperature.text = "low: \(Int(fiveDayForecast.main.temp_min))"
         maxTemperature.text = "high: \(Int(fiveDayForecast.main.temp_max))"
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    
+        if let date = dateFormatter.date(from: fiveDayForecast.dt_txt) {
+            let weekdayFormatter = DateFormatter()
+            weekdayFormatter.locale = Locale(identifier: "en_US_POSIX")
+            weekdayFormatter.dateFormat = "EEEE"
+            let weekday = weekdayFormatter.string(from: date)
+            print(weekday)
+            daysLabel.text = weekday.capitalized
+        } else {
+            daysLabel.text = "-"
+        }
     }
 }
