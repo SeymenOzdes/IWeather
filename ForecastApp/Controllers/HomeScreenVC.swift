@@ -14,8 +14,8 @@ final class HomeScreenVC: UIViewController {
     private let locationService = LocationService()
     private let networkManager = NetworkManager()
     private let loadingIndicator = LoadingIndicator(frame: .zero)
-    private var weatherModel: [WeatherModel] = []
-    
+    private var forecast: [Forecast] = []
+    private var fiveDaysForecast: [FiveDaysForecast] = []
     override func loadView() {
         super.loadView()
         
@@ -66,24 +66,27 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        weatherModel.count
+        forecast.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard indexPath.item < weatherModel.count else {
-            print("HATA: Geçersiz indexPath.item: \(indexPath.item), weatherModel.count: \(weatherModel.count)")
+        guard indexPath.item < forecast.count else {
+            print("HATA: Geçersiz indexPath.item: \(indexPath.item), weatherModel.count: \(forecast.count)")
             return UICollectionViewCell()
         }
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCollectionViewCell
-        let weather = weatherModel[indexPath.item]
+        let weather = forecast[indexPath.item]
         cell.configureLabel(with: weather, temp_Min: weather.main.temp_min, temp_Max: weather.main.temp_max)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let weather = weatherModel[indexPath.item]
-        let weatherDetailScreen = WeatherDetailVC(weatherModel: weather)
+        let forecast = forecast[indexPath.item]
+        print(indexPath.item)
+        let fiveDaysForecast = fiveDaysForecast[indexPath.item]
+        print(fiveDaysForecast)
+        guard let weatherDetailScreen = WeatherDetailVC(forecast: forecast, fiveDaysForecast: fiveDaysForecast) else { return }
         navigationController?.pushViewController(weatherDetailScreen, animated: true)
     }
     
@@ -106,7 +109,9 @@ extension HomeScreenVC: LocationServiceDelegate {
         Task {
             do {
                 let weatherData = try await networkManager.fetchCurrentForecast(latitude: latitude, longitude: longitude)
-                weatherModel.append(weatherData)
+                let fiveDayForecast = try await networkManager.fetchFiveDayForecast(latitude: latitude, longitude: longitude)
+                forecast.append(weatherData)
+                fiveDaysForecast.append(fiveDayForecast)
                 collectionView.reloadData()
             } catch {
                 print("error \(error.localizedDescription)")

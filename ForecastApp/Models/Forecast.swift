@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WeatherModel: Codable {
+struct Forecast: Codable {
     let name: String
     let weather: [Weather]
     let main: Main
@@ -22,13 +22,13 @@ struct WeatherModel: Codable {
         let temp_max: Double
     }
     
-    static let mockWeatherData: [WeatherModel] = [
-        WeatherModel(
+    static let mockWeatherData: [Forecast] = [
+        Forecast(
             name: "İzmir",
             weather: [Weather(id: 800, description: "mostly sunny")],
             main: Main(temp: 20, temp_min: 24, temp_max: 26)
         ),
-        WeatherModel(
+        Forecast(
             name: "İstanbul",
             weather: [Weather(id: 803, description: "cloudly")],
             main: Main(temp: 14, temp_min: 2, temp_max: 13)

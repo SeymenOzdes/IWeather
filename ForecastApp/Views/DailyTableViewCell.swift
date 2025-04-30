@@ -1,7 +1,8 @@
 import UIKit
 
 class DailyTableViewCell: UITableViewCell {
-    var weatherModel: WeatherModel?
+    var forecast: Forecast?
+    var fiveDaysForcast: FiveDaysForecast?
     
     private lazy var minTemperature: UILabel = {
         let label = UILabel()
@@ -75,8 +76,8 @@ extension DailyTableViewCell {
             icons.heightAnchor.constraint(equalToConstant: 25)
         ])
     }
-    func configureDailyTableViewCell(with weather: WeatherModel) {
-        minTemperature.text = "low: \(Int(weather.main.temp_min))"
-        maxTemperature.text = "high: \(Int(weather.main.temp_max))"
+    func configureDailyTableViewCell(with fiveDayForecast: FiveDaysForecast.List) {
+        minTemperature.text = "low: \(Int(fiveDayForecast.main.temp_min))"
+        maxTemperature.text = "high: \(Int(fiveDayForecast.main.temp_max))"
     }
 }

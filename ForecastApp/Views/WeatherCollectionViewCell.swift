@@ -100,14 +100,13 @@ extension WeatherCollectionViewCell {
             contentView.layer.cornerRadius = 18
             contentView.layer.masksToBounds = true
             
-            // Optional: Add a subtle shadow for depth
             layer.shadowColor = UIColor.black.cgColor
             layer.shadowOffset = CGSize(width: 0, height: 2)
             layer.shadowRadius = 4
             layer.shadowOpacity = 0.1
         }
     // MARK: High and low bölümünden verilerin çekilmesine bakılacak.
-    func configureLabel(with weatherData: WeatherModel, temp_Min: Double, temp_Max: Double) {
+    func configureLabel(with weatherData: Forecast, temp_Min: Double, temp_Max: Double) {
         cityName.text = weatherData.name
         temparature.text = String(Int(weatherData.main.temp))
         weatherDesc.text = weatherData.weather.first?.description ?? "No description available"

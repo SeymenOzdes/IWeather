@@ -1,7 +1,7 @@
 import UIKit
 
 class HourlyCollectionViewCell: UICollectionViewCell {
-    var weatherModel: WeatherModel?
+    var weatherModel: Forecast?
     
     private lazy var hours: UILabel = {
         let label = UILabel()
@@ -68,7 +68,7 @@ extension HourlyCollectionViewCell {
         ])
     }
     
-    func configureHourlyCollectionView(with weather: WeatherModel) {
+    func configureHourlyCollectionView(with weather: Forecast) {
         temperature.text = "\(Int(weather.main.temp))"
     }
 }

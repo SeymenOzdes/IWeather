@@ -8,13 +8,14 @@
 import UIKit
 
 class WeatherDetailVC: UIViewController {
-    private let weatherModel: WeatherModel
+    private let forecast: Forecast
+    private let fiveDaysForecast: FiveDaysForecast
     private var hourlycollectionView: UICollectionView!
     private var dailyTableView: UITableView!
-        
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = weatherModel.name
+        label.text = forecast.name
         label.translatesAutoresizingMaskIntoConstraints = false
         let customFont = UIFont.systemFont(ofSize: 50, weight: .semibold)
         label.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: customFont)
@@ -24,7 +25,7 @@ class WeatherDetailVC: UIViewController {
     
     private lazy var temperature: UILabel = {
         let label = UILabel()
-        label.text = String(Int(weatherModel.main.temp))
+        label.text = String(Int(forecast.main.temp))
         label.translatesAutoresizingMaskIntoConstraints = false
         let customFont = UIFont.systemFont(ofSize: 76, weight: .bold)
         label.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: customFont)
@@ -34,7 +35,7 @@ class WeatherDetailVC: UIViewController {
     
     private lazy var weatherDesciption: UILabel = {
         let label = UILabel()
-        label.text = weatherModel.weather.first?.description ?? "No desctiption available"
+        label.text = forecast.weather.first?.description ?? "No desctiption available"
         label.translatesAutoresizingMaskIntoConstraints = false
         let customFont = UIFont.systemFont(ofSize: 20, weight: .medium)
         label.font = UIFontMetrics(forTextStyle: .largeTitle).scaledFont(for: customFont)
@@ -45,7 +46,7 @@ class WeatherDetailVC: UIViewController {
     private lazy var maxAndLowTemps: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "H:\(Int(weatherModel.main.temp_max))° L:\(Int(weatherModel.main.temp_min))°"
+        label.text = "H:\(Int(forecast.main.temp_max))° L:\(Int(forecast.main.temp_min))°"
         label.textColor = .white.withAlphaComponent(0.7)
         label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         return label
@@ -64,24 +65,16 @@ class WeatherDetailVC: UIViewController {
         return stackView
     }()
     
-    private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.showsVerticalScrollIndicator = true
-        return scrollView
-    }()
-    
-    private lazy var contentView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    init(weatherModel: WeatherModel?) {
-        self.weatherModel = weatherModel!
+    init?(forecast: Forecast?, fiveDaysForecast: FiveDaysForecast?) {
+        guard let fiveDaysForecast = fiveDaysForecast, let forecast = forecast else {
+            return nil
+        }
+        self.fiveDaysForecast = fiveDaysForecast
+        self.forecast = forecast
         super.init(nibName: nil, bundle: nil)
     
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -92,6 +85,7 @@ class WeatherDetailVC: UIViewController {
         setUpUI()
         configureConstraints()
     }
+    
     private func setUpUI() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -143,7 +137,7 @@ extension WeatherDetailVC: UICollectionViewDelegate, UICollectionViewDataSource,
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCell", for: indexPath) as! HourlyCollectionViewCell
-        cell.configureHourlyCollectionView(with: weatherModel)
+        cell.configureHourlyCollectionView(with: forecast)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -156,15 +150,15 @@ extension WeatherDetailVC: UICollectionViewDelegate, UICollectionViewDataSource,
 
 extension WeatherDetailVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        weatherModel.name.count
+        3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "DailyCell", for: indexPath) as? DailyTableViewCell else {
             fatalError("Could not dequeue DailyTableViewCell")
         }
-        
-        cell.configureDailyTableViewCell(with: weatherModel)
+        let dailyForecast = fiveDaysForecast.list[indexPath.row]
+        cell.configureDailyTableViewCell(with: dailyForecast)
         return cell
     }
     
