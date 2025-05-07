@@ -16,7 +16,11 @@ final class HomeScreenVC: UIViewController {
     private let loadingIndicator = LoadingIndicator(frame: .zero)
     private var forecast: [Forecast] = []
     private var fiveDaysForecast: [FiveDaysForecast] = []
-
+    private let collectionViewCellIdentifier = "WeatherCell"
+    /// Search results table view.
+    // private var resultsTableController: ResultsTableController!
+    var searchController: UISearchController!
+    
     override func loadView() {
         super.loadView()
         
@@ -45,9 +49,17 @@ final class HomeScreenVC: UIViewController {
         collectionView.dataSource = self
         locationService.delegate = self
         
-        collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: "WeatherCell")
+        collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: collectionViewCellIdentifier)
         locationService.requestLocationPermission()
         setupLoadingIndicator()
+        searchController = UISearchController(searchResultsController: nil)
+        
+        navigationItem.searchController = searchController
+        
+        Task {
+            let coordinates = try await networkManager.fetchCoordinates(city: "London")
+            print(coordinates)
+        }
     }
     private func setupLoadingIndicator() {
         view.addSubview(loadingIndicator)
@@ -76,7 +88,7 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
             return UICollectionViewCell()
         }
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WeatherCell", for: indexPath) as! WeatherCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: collectionViewCellIdentifier, for: indexPath) as! WeatherCollectionViewCell
         let weather = forecast[indexPath.item]
         cell.configureLabel(with: weather, temp_Min: weather.main.temp_min, temp_Max: weather.main.temp_max)
         return cell
@@ -112,10 +124,8 @@ extension HomeScreenVC: LocationServiceDelegate {
 
                 forecast.append(weatherData)
                 
-                // ⬇️ Yalnızca her günden bir tanesini al:
                 let filteredList = filterOneForecastPerDay(from: fiveDayForecast.list)
                 
-                // ⬇️ Yeni veriyi gönder:
                 let filteredFiveDays = FiveDaysForecast(list: filteredList)
                 fiveDaysForecast.append(filteredFiveDays)
                 
@@ -157,7 +167,10 @@ extension HomeScreenVC {
         return filtered
     }
 }
+
 extension UIColor {
     static let themeColor = UIColor(red: 74/255, green: 144/255, blue: 226/255, alpha: 1)
     static let mainBackgroundColor = UIColor(red: 240/255, green: 244/255, blue: 250/255, alpha: 1)
 }
+
+
