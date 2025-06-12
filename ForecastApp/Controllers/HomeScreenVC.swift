@@ -11,14 +11,16 @@ import CoreLocation
 final class HomeScreenVC: UIViewController {
     
     weak var collectionView: UICollectionView!
+    private var searchWorkItem: DispatchWorkItem?
+    private var forecast: [Forecast] = []
+    private var fiveDaysForecast: [FiveDaysForecast] = []
     private let locationService = LocationService()
     private let networkManager = NetworkManager()
     private let loadingIndicator = LoadingIndicator(frame: .zero)
-    private var forecast: [Forecast] = []
-    private var fiveDaysForecast: [FiveDaysForecast] = []
     private let collectionViewCellIdentifier = "WeatherCell"
-    /// Search results table view.
-    // private var resultsTableController: ResultsTableController!
+    private var resultTableView = ResultTableController()
+    
+    
     var searchController: UISearchController!
     
     override func loadView() {
@@ -52,14 +54,12 @@ final class HomeScreenVC: UIViewController {
         collectionView.register(WeatherCollectionViewCell.self, forCellWithReuseIdentifier: collectionViewCellIdentifier)
         locationService.requestLocationPermission()
         setupLoadingIndicator()
-        searchController = UISearchController(searchResultsController: nil)
         
-        navigationItem.searchController = searchController
+        setUpSearchBar()
         
-        Task {
-            let coordinates = try await networkManager.fetchCoordinates(city: "London")
-            print(coordinates)
-        }
+        
+        // MARK: Search Function Test
+       
     }
     private func setupLoadingIndicator() {
         view.addSubview(loadingIndicator)
@@ -69,6 +69,28 @@ final class HomeScreenVC: UIViewController {
             loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+    }
+    func filterOneForecastPerDay(from list: [FiveDaysForecast.List]) -> [FiveDaysForecast.List] {
+        var filtered: [FiveDaysForecast.List] = []
+        var seenDays: Set<String> = []
+
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "yyyy-MM-dd"
+
+        for forecast in list {
+            guard let date = inputFormatter.date(from: forecast.dt_txt) else { continue }
+            let dayString = outputFormatter.string(from: date)
+
+            if !seenDays.contains(dayString) {
+                filtered.append(forecast)
+                seenDays.insert(dayString)
+            }
+        }
+
+        return filtered
     }
 }
 
@@ -111,7 +133,7 @@ extension HomeScreenVC: UICollectionViewDelegate, UICollectionViewDataSource, UI
 }
 
 extension HomeScreenVC: LocationServiceDelegate {
-    func locationService(_: LocationService, didUpdateLocation Location: CLLocation)  {
+    func locationService(_: LocationService, didUpdateLocation Location: CLLocation) {
         let latitude = Location.coordinate.latitude
         let longitude = Location.coordinate.longitude
         
@@ -125,46 +147,21 @@ extension HomeScreenVC: LocationServiceDelegate {
                 forecast.append(weatherData)
                 
                 let filteredList = filterOneForecastPerDay(from: fiveDayForecast.list)
-                
                 let filteredFiveDays = FiveDaysForecast(list: filteredList)
                 fiveDaysForecast.append(filteredFiveDays)
                 
                 collectionView.reloadData()
+                
             } catch {
                 print("error \(error.localizedDescription)")
             }
+            
             loadingIndicator.stopAnimating()
         }
-
     }
     
     func locationService(_: LocationService, didFailWithError: any Error) {
         print("location \(didFailWithError)")
-    }
-}
-
-extension HomeScreenVC {
-    func filterOneForecastPerDay(from list: [FiveDaysForecast.List]) -> [FiveDaysForecast.List] {
-        var filtered: [FiveDaysForecast.List] = []
-        var seenDays: Set<String> = []
-
-        let inputFormatter = DateFormatter()
-        inputFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-
-        let outputFormatter = DateFormatter()
-        outputFormatter.dateFormat = "yyyy-MM-dd"
-
-        for forecast in list {
-            guard let date = inputFormatter.date(from: forecast.dt_txt) else { continue }
-            let dayString = outputFormatter.string(from: date)
-
-            if !seenDays.contains(dayString) {
-                filtered.append(forecast)
-                seenDays.insert(dayString)
-            }
-        }
-
-        return filtered
     }
 }
 
@@ -174,3 +171,45 @@ extension UIColor {
 }
 
 
+
+
+
+
+//MARK: SearchBarDelegate
+extension HomeScreenVC: UISearchBarDelegate, UISearchResultsUpdating {
+    
+    func setUpSearchBar() {
+        searchController = UISearchController(searchResultsController: resultTableView)
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        navigationItem.searchController = searchController
+    }
+    func fetchSearchedCities(city: String) async throws -> Forecast {
+        let coordinates = try await networkManager.fetchCoordinates(city: city)
+        let searchedCity = try await networkManager.fetchCurrentForecast(latitude: coordinates.lat, longitude: coordinates.lon)
+        return searchedCity
+        
+    }
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let text = searchController.searchBar.text, !text.isEmpty else {
+            resultTableView.view.isHidden = true
+            return
+        }
+        
+        searchWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            Task {
+                do {
+                    let city = try await self?.fetchSearchedCities(city: text)
+                    print(city ?? "No city found")
+                }
+                catch {
+                    print("Error fetching city: \(error)")
+                }
+            }
+        }
+        searchWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: workItem)
+    }
+}

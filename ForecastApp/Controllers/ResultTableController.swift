@@ -8,11 +8,45 @@
 import UIKit
 
 class ResultTableController: UITableViewController {
-    let tableViewCellIdentifier = "cellID"
-    // let filteredCities = [Cities]
+    private let cellIdentifier = "cityCell"
+    var cities: [Forecast] = []
     
+    init() {
+        super.init(style: .grouped)
+    }
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
     }
-    // MARK: - Table view data source
+    private var cityName: UILabel = {
+        var label = UILabel()
+        label.text = "deneme"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
+        return label
+    }()
+}
+
+extension ResultTableController {
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
+        let city = cities[indexPath.row]
+        cell.textLabel?.text = city.name
+        return cell
+    }
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        cities.count
+    }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        60
+    }
+}
+
+extension ResultTableController {
+    func update(with cities: Forecast) {
+        cityName.text = cities.name
+    }
 }

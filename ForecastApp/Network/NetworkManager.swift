@@ -45,11 +45,9 @@ class NetworkManager {
         
         let (data, _) = try await URLSession.shared.data(from: url)
         let decodedCities = try JSONDecoder().decode([City].self, from: data)
-        
         guard let firstCity = decodedCities.first else {
             throw networkError.noData
         }
-        
         return firstCity
     }
 }

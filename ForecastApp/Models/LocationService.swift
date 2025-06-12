@@ -27,7 +27,7 @@ extension LocationService {
     private func prepareLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        locationManager.distanceFilter = 1000 // 1km'lik hareket etmediğin sürece konum güncellemesi yapma
+        locationManager.distanceFilter = 5000 // 1km'lik hareket etmediğin sürece konum güncellemesi yapma
     }
     
     func requestLocation() {

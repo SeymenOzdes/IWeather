@@ -88,7 +88,6 @@ extension DailyTableViewCell {
             weekdayFormatter.locale = Locale(identifier: "en_US_POSIX")
             weekdayFormatter.dateFormat = "EEEE"
             let weekday = weekdayFormatter.string(from: date)
-            print(weekday)
             daysLabel.text = weekday.capitalized
         } else {
             daysLabel.text = "-"
