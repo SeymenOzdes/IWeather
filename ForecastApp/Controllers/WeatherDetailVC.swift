@@ -10,7 +10,6 @@ import UIKit
 class WeatherDetailVC: UIViewController {
     private let forecast: Forecast
     private let fiveDaysForecast: FiveDaysForecast
-    private var hourlycollectionView: UICollectionView!
     private var dailyTableView: UITableView!
 
     private lazy var scrollView: UIScrollView = {
@@ -114,18 +113,6 @@ class WeatherDetailVC: UIViewController {
     }
 
     private func setUpUI() {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-
-        hourlycollectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        hourlycollectionView.translatesAutoresizingMaskIntoConstraints = false
-        hourlycollectionView.register(HourlyCollectionViewCell.self, forCellWithReuseIdentifier: "HourlyCell")
-        hourlycollectionView.backgroundColor = .systemBlue
-        hourlycollectionView.layer.cornerRadius = 18
-        hourlycollectionView.showsHorizontalScrollIndicator = false
-        hourlycollectionView?.delegate = self
-        hourlycollectionView?.dataSource = self
-
         dailyTableView = UITableView(frame: .zero, style: .plain)
         dailyTableView.translatesAutoresizingMaskIntoConstraints = false
         dailyTableView.register(DailyTableViewCell.self, forCellReuseIdentifier: "DailyCell")
@@ -138,7 +125,6 @@ class WeatherDetailVC: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(headerStackView)
-        contentView.addSubview(hourlycollectionView!)
         contentView.addSubview(dailyTableView)
     }
 
@@ -159,35 +145,12 @@ class WeatherDetailVC: UIViewController {
             headerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             headerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
 
-            hourlycollectionView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 30),
-            hourlycollectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            hourlycollectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            hourlycollectionView.heightAnchor.constraint(equalToConstant: 200),
-
-            dailyTableView.topAnchor.constraint(equalTo: hourlycollectionView.bottomAnchor, constant: 20),
+            dailyTableView.topAnchor.constraint(equalTo: headerStackView.bottomAnchor, constant: 30),
             dailyTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             dailyTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             dailyTableView.heightAnchor.constraint(equalToConstant: 350),
             dailyTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30)
         ])
-    }
-}
-
-extension WeatherDetailVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        12
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCell", for: indexPath) as! HourlyCollectionViewCell
-        cell.configureHourlyCollectionView(with: forecast)
-        return cell
-    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: 60, height: 120)
-    }
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
     }
 }
 
