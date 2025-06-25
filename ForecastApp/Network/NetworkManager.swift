@@ -48,6 +48,7 @@ class NetworkManager {
         guard let firstCity = decodedCities.first else {
             throw networkError.noData
         }
+        
         return firstCity
     }
 }

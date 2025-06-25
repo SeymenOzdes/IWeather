@@ -20,7 +20,6 @@ final class HomeScreenVC: UIViewController {
     private let collectionViewCellIdentifier = "WeatherCell"
     private var resultTableView = ResultTableController()
     
-    
     var searchController: UISearchController!
     
     override func loadView() {
@@ -170,11 +169,6 @@ extension UIColor {
     static let mainBackgroundColor = UIColor(red: 240/255, green: 244/255, blue: 250/255, alpha: 1)
 }
 
-
-
-
-
-
 //MARK: SearchBarDelegate
 extension HomeScreenVC: UISearchBarDelegate, UISearchResultsUpdating {
     
@@ -201,8 +195,9 @@ extension HomeScreenVC: UISearchBarDelegate, UISearchResultsUpdating {
         let workItem = DispatchWorkItem { [weak self] in
             Task {
                 do {
-                    let city = try await self?.fetchSearchedCities(city: text)
-                    print(city ?? "No city found")
+                    guard let cityForecast = try await self?.fetchSearchedCities(city: text) else {return}
+                    self?.resultTableView.update(with: cityForecast)
+                    print(cityForecast ?? "No city found")
                 }
                 catch {
                     print("Error fetching city: \(error)")

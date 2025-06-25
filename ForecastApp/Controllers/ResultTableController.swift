@@ -9,7 +9,7 @@ import UIKit
 
 class ResultTableController: UITableViewController {
     private let cellIdentifier = "cityCell"
-    var cities: [Forecast] = []
+    var searchResults: [Forecast] = []
     
     init() {
         super.init(style: .grouped)
@@ -23,7 +23,6 @@ class ResultTableController: UITableViewController {
     }
     private var cityName: UILabel = {
         var label = UILabel()
-        label.text = "deneme"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 24, weight: .semibold)
         return label
@@ -33,12 +32,12 @@ class ResultTableController: UITableViewController {
 extension ResultTableController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-        let city = cities[indexPath.row]
+        let city = searchResults[indexPath.row]
         cell.textLabel?.text = city.name
         return cell
     }
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        cities.count
+        searchResults.count
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         60
@@ -47,6 +46,7 @@ extension ResultTableController {
 
 extension ResultTableController {
     func update(with cities: Forecast) {
-        cityName.text = cities.name
+        searchResults.append(cities)
+        tableView.reloadData()
     }
 }
