@@ -3,7 +3,7 @@ import UIKit
 class DailyTableViewCell: UITableViewCell {
     var forecast: Forecast?
     var fiveDaysForcast: FiveDaysForecast?
-    
+
     private lazy var minTemperature: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -11,7 +11,7 @@ class DailyTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         return label
     }()
-    
+
     private lazy var maxTemperature: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -19,7 +19,7 @@ class DailyTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         return label
     }()
-    
+
     private lazy var icons: UIImageView = {
         let image = UIImage(systemName: "sun.max.fill")!.withTintColor(.yellow, renderingMode: .alwaysOriginal)
         let imageView = UIImageView(image: image)
@@ -35,7 +35,7 @@ class DailyTableViewCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         return label
     }()
-    
+
     private lazy var mainStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [daysLabel, icons, minTemperature, maxTemperature])
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -45,15 +45,16 @@ class DailyTableViewCell: UITableViewCell {
         stackView.alignment = .center
         return stackView
     }()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         setUpUI()
         configureConstraints()
     }
-    
-    required init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -64,25 +65,26 @@ extension DailyTableViewCell {
         contentView.backgroundColor = .themeColor
         contentView.layer.cornerRadius = 12
     }
-    
+
     private func configureConstraints() {
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-            
+
             icons.widthAnchor.constraint(equalToConstant: 25),
-            icons.heightAnchor.constraint(equalToConstant: 25)
+            icons.heightAnchor.constraint(equalToConstant: 25),
         ])
     }
+
     func configureDailyTableViewCell(with fiveDayForecast: FiveDaysForecast.List) {
         minTemperature.text = "low: \(Int(fiveDayForecast.main.temp_min))"
         maxTemperature.text = "high: \(Int(fiveDayForecast.main.temp_max))"
-        
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-    
+
         if let date = dateFormatter.date(from: fiveDayForecast.dt_txt) {
             let weekdayFormatter = DateFormatter()
             weekdayFormatter.locale = Locale(identifier: "en_US_POSIX")

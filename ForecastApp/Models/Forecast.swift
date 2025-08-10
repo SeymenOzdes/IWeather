@@ -11,17 +11,18 @@ struct Forecast: Codable {
     let name: String
     let weather: [Weather]
     let main: Main
-    
+
     struct Weather: Codable {
         let id: Int
         let description: String
     }
+
     struct Main: Codable {
         let temp: Double
         let temp_min: Double
         let temp_max: Double
     }
-    
+
     static let mockWeatherData: [Forecast] = [
         Forecast(
             name: "İzmir",
@@ -32,6 +33,6 @@ struct Forecast: Codable {
             name: "İstanbul",
             weather: [Weather(id: 803, description: "cloudly")],
             main: Main(temp: 14, temp_min: 2, temp_max: 13)
-        )
+        ),
     ]
 }

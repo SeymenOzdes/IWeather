@@ -11,7 +11,7 @@ struct City: Codable {
     var name: String
     var lat: Double
     var lon: Double
-    
+
     enum CodingKeys: String, CodingKey {
         case name
         case lat

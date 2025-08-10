@@ -5,16 +5,16 @@ class LoadingIndicator: UIActivityIndicatorView {
         super.init(frame: frame)
         setUpUI()
     }
-    
+
     required init(coder: NSCoder) {
-        super.init(coder: coder) 
+        super.init(coder: coder)
         setUpUI()
     }
-    
+
     private func setUpUI() {
-        self.color = .blue
-        self.hidesWhenStopped = true
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.style = .large
+        color = .blue
+        hidesWhenStopped = true
+        translatesAutoresizingMaskIntoConstraints = false
+        style = .large
     }
 }

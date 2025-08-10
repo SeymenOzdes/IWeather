@@ -1,5 +1,5 @@
 //
-//  WeatherDetailViewController.swift
+//  WeatherDetailVC.swift
 //  ForecastApp
 //
 //  Created by Seymen Özdeş on 12.03.2025.
@@ -92,16 +92,25 @@ class WeatherDetailVC: UIViewController {
         return stackView
     }()
 
-    init?(forecast: Forecast?, fiveDaysForecast: FiveDaysForecast?) {
-        guard let fiveDaysForecast = fiveDaysForecast, let forecast = forecast else {
+    init?(forecast: Forecast?, fiveDaysForecast: FiveDaysForecast? = nil) {
+        guard let forecast = forecast else {
             return nil
         }
-        self.fiveDaysForecast = fiveDaysForecast
         self.forecast = forecast
+
+        // Eğer fiveDaysForecast nil ise, boş bir liste oluştur
+        if let fiveDaysForecast = fiveDaysForecast {
+            self.fiveDaysForecast = fiveDaysForecast
+        } else {
+            // Boş FiveDaysForecast oluştur
+            self.fiveDaysForecast = FiveDaysForecast(list: [])
+        }
+
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -149,13 +158,13 @@ class WeatherDetailVC: UIViewController {
             dailyTableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             dailyTableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             dailyTableView.heightAnchor.constraint(equalToConstant: 350),
-            dailyTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30)
+            dailyTableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
         ])
     }
 }
 
 extension WeatherDetailVC: UITableViewDataSource, UITableViewDelegate {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_: UITableView, numberOfRowsInSection _: Int) -> Int {
         5
     }
 
@@ -168,16 +177,18 @@ extension WeatherDetailVC: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
 
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    func tableView(_: UITableView, heightForRowAt _: IndexPath) -> CGFloat {
         60
     }
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+
+    func tableView(_: UITableView, titleForHeaderInSection _: Int) -> String? {
         "5-Day Forecast"
     }
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+
+    func tableView(_: UITableView, willDisplayHeaderView view: UIView, forSection _: Int) {
         if let header = view as? UITableViewHeaderFooterView {
             header.textLabel?.textColor = .white
-            header.contentView.backgroundColor = UIColor(red: 74/255, green: 144/255, blue: 226/255, alpha: 1)
+            header.contentView.backgroundColor = UIColor(red: 74 / 255, green: 144 / 255, blue: 226 / 255, alpha: 1)
             header.contentView.layer.cornerRadius = 12
         }
     }

@@ -2,7 +2,7 @@ import UIKit
 
 class HourlyCollectionViewCell: UICollectionViewCell {
     var weatherModel: Forecast?
-    
+
     private lazy var hours: UILabel = {
         let label = UILabel()
         label.text = "10AM"
@@ -11,14 +11,14 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private lazy var icons: UIImageView = {
         let image = UIImage(systemName: "sun.max.fill")!.withTintColor(.yellow, renderingMode: .alwaysOriginal)
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
-    
+
     private lazy var temperature: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -27,7 +27,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         label.font = UIFont.systemFont(ofSize: label.font.pointSize, weight: .semibold)
         return label
     }()
-    
+
     private lazy var mainStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [hours, icons, temperature])
         stackView.axis = .vertical
@@ -36,14 +36,15 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUpUI()
         configureConstraints()
     }
-    
-    required init?(coder: NSCoder) {
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
@@ -55,19 +56,19 @@ extension HourlyCollectionViewCell {
         contentView.layer.cornerRadius = 12
         contentView.layer.masksToBounds = true
     }
-    
+
     private func configureConstraints() {
         NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             mainStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             mainStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             mainStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            
+
             icons.widthAnchor.constraint(equalToConstant: 30),
-            icons.heightAnchor.constraint(equalToConstant: 30)
+            icons.heightAnchor.constraint(equalToConstant: 30),
         ])
     }
-    
+
     func configureHourlyCollectionView(with weather: Forecast) {
         temperature.text = "\(Int(weather.main.temp))"
     }

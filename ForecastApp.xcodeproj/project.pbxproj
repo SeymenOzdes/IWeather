@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		2EA488B22E424ABE00F443E2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E4E79AD2D786A2F00141B36 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2E4E79B42D786A2F00141B36;
+			remoteInfo = ForecastApp;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		2E4E79B52D786A2F00141B36 /* ForecastApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForecastApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2EA488AE2E424ABE00F443E2 /* iWeatherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iWeatherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -29,10 +40,22 @@
 			path = ForecastApp;
 			sourceTree = "<group>";
 		};
+		2EA488AF2E424ABE00F443E2 /* iWeatherTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = iWeatherTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		2E4E79B22D786A2F00141B36 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2EA488AB2E424ABE00F443E2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -46,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				2E4E79B72D786A2F00141B36 /* ForecastApp */,
+				2EA488AF2E424ABE00F443E2 /* iWeatherTests */,
 				2E4E79B62D786A2F00141B36 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				2E4E79B52D786A2F00141B36 /* ForecastApp.app */,
+				2EA488AE2E424ABE00F443E2 /* iWeatherTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -83,6 +108,29 @@
 			productReference = 2E4E79B52D786A2F00141B36 /* ForecastApp.app */;
 			productType = "com.apple.product-type.application";
 		};
+		2EA488AD2E424ABE00F443E2 /* iWeatherTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2EA488B62E424ABE00F443E2 /* Build configuration list for PBXNativeTarget "iWeatherTests" */;
+			buildPhases = (
+				2EA488AA2E424ABE00F443E2 /* Sources */,
+				2EA488AB2E424ABE00F443E2 /* Frameworks */,
+				2EA488AC2E424ABE00F443E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2EA488B32E424ABE00F443E2 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				2EA488AF2E424ABE00F443E2 /* iWeatherTests */,
+			);
+			name = iWeatherTests;
+			packageProductDependencies = (
+			);
+			productName = iWeatherTests;
+			productReference = 2EA488AE2E424ABE00F443E2 /* iWeatherTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -90,11 +138,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					2E4E79B42D786A2F00141B36 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					2EA488AD2E424ABE00F443E2 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 2E4E79B42D786A2F00141B36;
 					};
 				};
 			};
@@ -113,12 +165,20 @@
 			projectRoot = "";
 			targets = (
 				2E4E79B42D786A2F00141B36 /* ForecastApp */,
+				2EA488AD2E424ABE00F443E2 /* iWeatherTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		2E4E79B32D786A2F00141B36 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2EA488AC2E424ABE00F443E2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -135,7 +195,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2EA488AA2E424ABE00F443E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2EA488B32E424ABE00F443E2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2E4E79B42D786A2F00141B36 /* ForecastApp */;
+			targetProxy = 2EA488B22E424ABE00F443E2 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		2E4E79C92D786A3000141B36 /* Debug */ = {
@@ -309,6 +384,42 @@
 			};
 			name = Release;
 		};
+		2EA488B42E424ABE00F443E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.ozdes.seymen.iWeatherTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ForecastApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ForecastApp";
+			};
+			name = Debug;
+		};
+		2EA488B52E424ABE00F443E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.ozdes.seymen.iWeatherTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ForecastApp.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/ForecastApp";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -326,6 +437,15 @@
 			buildConfigurations = (
 				2E4E79C92D786A3000141B36 /* Debug */,
 				2E4E79CA2D786A3000141B36 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2EA488B62E424ABE00F443E2 /* Build configuration list for PBXNativeTarget "iWeatherTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EA488B42E424ABE00F443E2 /* Debug */,
+				2EA488B52E424ABE00F443E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
